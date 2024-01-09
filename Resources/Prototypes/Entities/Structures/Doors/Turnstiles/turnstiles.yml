@@ -18,13 +18,23 @@
   - type: Rotatable
   - type: Transform
     noRot: false
+    snapCardinals: true
   - type: Fixtures
-    fixtures:
+    fixtures: # tall turnstile has two thin walls on each side.
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.49,-0.49,0.49,0.49" # same dimensions as a door for tall turnstile, prevents objects being thrown through
-        density: 100
+          bounds: "-0.49,-0.49,-0.44,0.49"
+        density: 200
+        mask:
+        - FullTileMask
+        layer:
+        - AirlockLayer
+      fix2:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "0.44,-0.49,0.49,0.49"
+        density: 200
         mask:
         - FullTileMask
         layer:
@@ -34,6 +44,8 @@
       path: /Audio/Effects/unbuckle.ogg
     bumpSound:
       collection: FenceRattle
+    spinnerPrototype: TurnstileSpinner
+    spinnerAnchorPoint: "0.0,0.0"
   - type: Appearance
   - type: Damageable
     damageContainer: Inorganic
@@ -69,16 +81,46 @@
   - type: Construction
     graph: TurnstileShort
     node: turnstileshort
+  - type: Turnstile
+    spinnerPrototype: TurnstileSpinner
+    spinnerAnchorPoint: "0.25,-0.3"
   - type: Anchorable
   - type: Fixtures
-    fixtures:
+    fixtures: # short turnstile has two short walls on each side.
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.05" # short turnstile has smaller bounds and acts more like machinery-sized object, allows thrown objects
-        density: 60
+          bounds: "-0.45,-0.45,0.45,0.05"
+        density: 150
         mask:
         - MachineMask
         layer:
         - MidImpassable
         - LowImpassable
+
+- type: entity
+  id: TurnstileSpinner
+  name: turnstile spinner
+  description: Internal free-rotating physics body of a turnstile.
+  components:
+  - type: Rotatable
+  - type: Transform
+    noRot: false
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: False
+    bodyStatus: InAir
+  - type: Fixtures
+    fixtures: # three spars in a fan arrangement; the minimum needed for a functioning turnstile
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.42,-0.05,0.42,0.05"
+        density: 100
+        mask:
+        - MobMask
+        layer:
+        - WallLayer
+  placement:
+    mode: PlaceFree
