@@ -31,19 +31,20 @@ public sealed class TurnstileSystem : EntitySystem
 
     private void CreateSpinner(Entity<TurnstileComponent, TransformComponent?> ent)
     {
-        if (!Resolve<TransformComponent>(ent, ref ent.Comp2))
+        if (!Resolve(ent, ref ent.Comp2))
             return;
 
-        if (ent.Comp1.SpinnerUid != EntityUid.Invalid)
+        if (ent.Comp1.SpinnerUid != null && ent.Comp1.SpinnerUid != EntityUid.Invalid)
             return;
 
         // Create Spinner entity, which this turnstile will use.
-        ent.Comp1.SpinnerUid = EntityManager.SpawnEntity(ent.Comp1.SpinnerPrototype, ent.Comp2.Coordinates);
+        var spinnerId = EntityManager.SpawnAtPosition(ent.Comp1.SpinnerPrototype.Id, ent.Comp2.Coordinates);
+        ent.Comp1.SpinnerUid = spinnerId;
 
         // Attach the Spinner using a revolute joint.
         var jointComp = EnsureComp<JointComponent>(ent);
-        var spinnerJointComp = EnsureComp<JointComponent>(ent.Comp1.SpinnerUid);
-        var revoluteJoint = _joints.CreateRevoluteJoint(ent, ent.Comp1.SpinnerUid, TurnstileJointId);
+        var spinnerJointComp = EnsureComp<JointComponent>(spinnerId);
+        var revoluteJoint = _joints.CreateRevoluteJoint(ent, spinnerId, TurnstileJointId);
 
         // Set up revolute joint settings.
         revoluteJoint.LocalAnchorA = ent.Comp1.SpinnerAnchorPoint;
@@ -58,6 +59,6 @@ public sealed class TurnstileSystem : EntitySystem
         revoluteJoint.UpperAngle = Single.DegreesToRadians(90.0f);
 
         Dirty(ent, jointComp);
-        Dirty(ent.Comp1.SpinnerUid, spinnerJointComp);
+        Dirty(spinnerId, spinnerJointComp);
     }
 }

@@ -1,8 +1,9 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared.Turnstile.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Physics.Dynamics.Joints;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Turnstile.Components;
@@ -15,21 +16,21 @@ public sealed partial class TurnstileComponent : Component
     /// <summary>
     /// The physics-driven spinner entity of the turnstile. It is managed by the TurnstileSystem.
     /// </summary>
-    [ViewVariables(VVAccess.ReadOnly)]
+    [ViewVariables(VVAccess.ReadWrite)]
     [DataField, AutoNetworkedField]
-    public EntityUid SpinnerUid;
+    public EntityUid? SpinnerUid;
 
     /// <summary>
     /// Turnstile Spinner prototype ID.
     /// </summary>
     [DataField]
-    public string SpinnerPrototype = "TurnstileSpinner";
+    public EntProtoId SpinnerPrototype = "TurnstileSpinner";
 
     /// <summary>
     /// Turnstile Spinner relative anchor point.
     /// </summary>
     [DataField]
-    public Vector2 SpinnerAnchorPoint = new Vector2(0.5f, 0.5f);
+    public Vector2 SpinnerAnchorPoint = new Vector2(0.5f, 0.0f);
 
     #endregion
 

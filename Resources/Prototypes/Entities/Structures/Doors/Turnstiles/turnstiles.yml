@@ -18,7 +18,6 @@
   - type: Rotatable
   - type: Transform
     noRot: false
-    snapCardinals: true
   - type: Fixtures
     fixtures: # tall turnstile has two thin walls on each side.
       fix1:
@@ -44,20 +43,18 @@
       path: /Audio/Effects/unbuckle.ogg
     bumpSound:
       collection: FenceRattle
-    spinnerPrototype: TurnstileSpinner
-    spinnerAnchorPoint: "0.5,0.0"
   - type: Appearance
   - type: Damageable
     damageContainer: Inorganic
     damageModifierSet: FlimsyMetallic
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 350
-      behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
+      - trigger:
+          !type:DamageTrigger
+          damage: 350
+        behaviors:
+        - !type:DoActsBehavior
+          acts: ["Destruction"]
   - type: Construction
     graph: Turnstile
     node: turnstile
@@ -82,7 +79,6 @@
     graph: TurnstileShort
     node: turnstileshort
   - type: Turnstile
-    spinnerPrototype: TurnstileSpinner
     spinnerAnchorPoint: "0.25,-0.3"
   - type: Anchorable
   - type: Fixtures
@@ -90,13 +86,23 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.05"
-        density: 150
+          bounds: "-0.49,-0.49,-0.44,-0.24"
+        density: 200
         mask:
-        - MachineMask
+          - MachineMask
         layer:
-        - MidImpassable
-        - LowImpassable
+          - MidImpassable
+          - LowImpassable
+      fix2:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "0.44,-0.49,0.49,-0.24"
+        density: 200
+        mask:
+          - MachineMask
+        layer:
+          - MidImpassable
+          - LowImpassable
 
 - type: entity
   id: TurnstileSpinner
