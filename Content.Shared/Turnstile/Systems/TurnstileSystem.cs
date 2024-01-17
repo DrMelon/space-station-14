@@ -47,42 +47,23 @@ public sealed class TurnstileSystem : EntitySystem
 
         // Set up revolute joint settings.
         revoluteJoint.LocalAnchorA = ent.Comp1.SpinnerAnchorPoint;
-        revoluteJoint.LocalAnchorB = new Vector2(0.0f, 0.0f);
+        revoluteJoint.LocalAnchorB = new Vector2(0.5f, 0.0f);
         revoluteJoint.CollideConnected = false;
 
-        // We need it to only spin in one direction, like a ratchet; Box2D convention is that you simply increase the
-        // minimum and maximum angle limit as the joint rotates in the desired direction.
+        // We need it to open to a maximum of 90 degrees; we don't want it opening any further. We also don't want it to
+        // rotate into the negative, so we give it a minimum angle of 0 degrees.
         revoluteJoint.EnableLimit = true;
         revoluteJoint.ReferenceAngle = 0f;
         revoluteJoint.LowerAngle = 0f;
-        revoluteJoint.UpperAngle = Single.DegreesToRadians(359.0f);
+        revoluteJoint.UpperAngle = Single.DegreesToRadians(90.0f);
 
-        // Additionally, setting a motor with speed 0 and a low torque allows the joint to slow to a halt when not being
-        // actively turned. We'll want this too, so that turnstiles don't just freewheel forever.
+        // Additionally, setting a motor with speed -1 and a low torque allows the joint to return to rest when not being
+        // actively pushed. We'll want this too, so that turnstiles don't just hang open forever.
         revoluteJoint.EnableMotor = true;
-        revoluteJoint.MaxMotorTorque = 0.001f;
-        revoluteJoint.MotorSpeed = 0f;
+        revoluteJoint.MaxMotorTorque = 0.1f;
+        revoluteJoint.MotorSpeed = -1f;
 
         Dirty(ent, jointComp);
         Dirty(ent.Comp1.SpinnerUid, spinnerJointComp);
-    }
-
-    /// <summary>
-    ///     Iterate over turnstiles and update the ratcheting angle.
-    /// </summary>
-    public override void Update(float frameTime)
-    {
-        var query = EntityQueryEnumerator<TurnstileComponent, JointComponent>();
-        while (query.MoveNext(out var uid, out var turnstile, out var jointComp))
-        {
-            if (jointComp.GetJoints.TryGetValue(TurnstileJointId, out var joint))
-            {
-                if (joint is RevoluteJoint revoluteJoint)
-                {
-                    revoluteJoint.LowerAngle = revoluteJoint.GetCurrentAngle();
-                    revoluteJoint.UpperAngle = revoluteJoint.GetCurrentAngle() + float.DegreesToRadians(1080.0f);
-                }
-            }
-        }
     }
 }
