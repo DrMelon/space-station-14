@@ -38,7 +38,7 @@ public sealed class TurnstileSystem : EntitySystem
             return;
 
         // Create Spinner entity, which this turnstile will use.
-        var spinnerId = EntityManager.SpawnAtPosition(ent.Comp1.SpinnerPrototype.Id, ent.Comp2.Coordinates);
+        var spinnerId = SpawnAtPosition(ent.Comp1.SpinnerPrototype.Id, ent.Comp2.Coordinates);
         ent.Comp1.SpinnerUid = spinnerId;
 
         // Attach the Spinner using a revolute joint.

@@ -16,7 +16,6 @@ public sealed partial class TurnstileComponent : Component
     /// <summary>
     /// The physics-driven spinner entity of the turnstile. It is managed by the TurnstileSystem.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
     [DataField, AutoNetworkedField]
     public EntityUid? SpinnerUid;
 
