@@ -57,12 +57,6 @@ public sealed class TurnstileSystem : EntitySystem
         revoluteJoint.LowerAngle = 0f;
         revoluteJoint.UpperAngle = Single.DegreesToRadians(90.0f);
 
-        // Additionally, setting a motor with speed -1 and a low torque allows the joint to return to rest when not being
-        // actively pushed. We'll want this too, so that turnstiles don't just hang open forever.
-        revoluteJoint.EnableMotor = true;
-        revoluteJoint.MaxMotorTorque = 0.1f;
-        revoluteJoint.MotorSpeed = -1f;
-
         Dirty(ent, jointComp);
         Dirty(ent.Comp1.SpinnerUid, spinnerJointComp);
     }
