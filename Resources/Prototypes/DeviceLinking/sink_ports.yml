@@ -112,7 +112,7 @@
   id: RandomGateInput
   name: signal-port-name-logic-random-input
   description: signal-port-description-logic-random-input
-  
+
 - type: sinkPort
   id: SetParticleDelta
   name: signal-port-name-set-particle-delta
@@ -130,5 +130,30 @@
 
 - type: sinkPort
   id: SetParticleSigma
+  name: signal-port-name-set-particle-sigma
+  description: signal-port-description-set-particle-sigma
+
+- type: sinkPort
+  id: RobotArmInteract
+  name: signal-port-name-set-particle-sigma
+  description: signal-port-description-set-particle-sigma
+
+- type: sinkPort
+  id: RobotArmDrop
+  name: signal-port-name-set-particle-sigma
+  description: signal-port-description-set-particle-sigma
+
+- type: sinkPort
+  id: RobotArmUse
+  name: signal-port-name-set-particle-sigma
+  description: signal-port-description-set-particle-sigma
+
+- type: sinkPort
+  id: RobotArmTurnCCW
+  name: signal-port-name-set-particle-sigma
+  description: signal-port-description-set-particle-sigma
+
+- type: sinkPort
+  id: RobotArmTurnCW
   name: signal-port-name-set-particle-sigma
   description: signal-port-description-set-particle-sigma

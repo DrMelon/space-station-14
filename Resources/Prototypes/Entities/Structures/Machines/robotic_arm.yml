@@ -1,0 +1,99 @@
+- type: entity
+  id: RoboticArm
+  parent: [ BaseMachinePowered, ConstructibleMachine, MobRobotic, StripableInventoryBase ]
+  name: robotic arm
+  description: Automate the drudgery away with this handy-dandy pivotable arm!
+  components:
+  - type: MovementSpeedModifier
+    baseWalkSpeed : 0
+    baseSprintSpeed : 0
+  - type: DeviceLinkSink
+    ports:
+    - RobotArmInteract
+    - RobotArmDrop
+    - RobotArmUse
+    - RobotArmTurnCCW
+    - RobotArmTurnCW
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    receiveFrequencyId: BasicDevice
+  - type: WirelessNetworkConnection
+    range: 200
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.16,0.3,0.16"
+        density: 190
+        mask:
+        - TabletopMachineMask
+        layer:
+        - TabletopMachineLayer
+  - type: Sprite
+    sprite: Structures/Machines/microwave.rsi
+    drawdepth: SmallObjects
+    snapCardinals: true
+    offset: "0.0,0.2"
+    layers:
+    - state: mw0
+      map: [ "enum.MicrowaveVisualizerLayers.Base" ]
+    - state: mw_unlit
+      shader: unshaded
+      map: [ "enum.MicrowaveVisualizerLayers.BaseUnlit" ]
+    - state: mwbloody0
+      map: [ "bloody" ]
+      visible: false
+    - state: mwbloody1
+      shader: unshaded
+      map: [ "bloodyunshaded" ]
+      visible: false
+    - type: Destructible
+      thresholds:
+      - trigger: # Excess damage, don't spawn entities
+          !type:DamageTrigger
+          damage: 200
+        behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 100
+        behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Breakage" ]
+  - type: ApcPowerReceiver
+    powerLoad: 400
+  - type: Machine
+    board: MicrowaveMachineCircuitboard
+  - type: ContainerContainer
+    containers:
+      machine_board: !type:Container
+      machine_parts: !type:Container
+  - type: EmptyOnMachineDeconstruct
+    containers:
+    - Hand
+    - ears
+  - type: CombatMode
+    canDisarm: true
+  - type: Inventory
+    templateId: ears
+  - type: Hands
+    activeHandId: Hand
+    hands:
+      Hand:
+        location: Right
+  - type: ComplexInteraction
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Effects/thunk.ogg
+    angle: 90
+    animation: WeaponArcFist
+    damage:
+      types:
+        Blunt: 5
+  - type: Stripping
+  - type: SentienceTarget
+    flavorKind: station-event-random-sentience-flavor-mechanical
+  - type: RoboticArm
